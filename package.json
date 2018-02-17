@@ -15,11 +15,15 @@
     "@types/react": "^16.0.36",
     "@types/react-dom": "^16.0.3",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-materialize": "^1.1.2"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.4.1",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^4.0.1",
+    "gulp-webpack": "^1.5.0",
     "source-map-loader": "^0.2.3",
-    "typescript": "^2.7.1"
+    "typescript": "^2.7.2"
   }
 }

@@ -52,7 +52,7 @@ chrome.runtime.onMessageExternal.addListener(
 function openAuthWindow() {
   chrome.windows.create({
     url: "https://api.envato.com/authorization?response_type=code&client_id=easy-music-uploader-q1haaron&redirect_uri=http://localhost/auth",
-    type: "popup",
+    // type: "popup",
     width: 655,
     height: 974
   }, function (win) {

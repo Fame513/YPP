@@ -1,73 +1,98 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import {Button, Icon} from 'react-materialize'
 
-const element = <h1>Hello, worlasdasdd!</h1>;
+chrome.runtime.getBackgroundPage(function (app: any) {
 
-class FileInput extends React.Component {
-  render() {
-    return (
-      <input type="file" multiple></input>
-    );
+
+  class FileInput extends React.Component {
+    render() {
+      return (
+        <input type="file" multiple></input>
+      );
+    }
   }
-}
 
-class SendBtn extends React.Component {
-  render() {
-    return (
-      <button>Send</button>
-    );
+  class SendBtn extends React.Component {
+    render() {
+      return (
+        <button>Send</button>
+      );
+    }
   }
-}
 
-class AuthBtn extends React.Component {
-  render() {
-    return (
-      <button>Auth</button>
-    );
+  class AuthBtn extends React.Component {
+    render() {
+      return (
+        <Button onClick={this.login}>Auth</Button>
+      );
+    }
+
+    login() {
+      app.openAuthWindow();
+    }
   }
-}
 
-class LogutBtn extends React.Component {
-  render() {
-    return (
-      <button>Logout</button>
-    );
+  class LogutBtn extends React.Component {
+    render() {
+      return (
+        <button>Logout</button>
+      );
+    }
   }
-}
 
-class PasteBtn extends React.Component {
-  render() {
-    return (
-      <button id='post-btn'>Paste</button>
-    );
+  class PasteBtn extends React.Component {
+    render() {
+      return (
+        <button onClick={this.pasteCode}>Paste</button>
+      );
+    }
+
+    pasteCode() {
+      console.log('past');
+    }
   }
-}
 
-class NewWindowBtn extends React.Component {
-  render() {
-    return (
-      <button id="open-btn">Open new window</button>
-    );
+  class NewWindowBtn extends React.Component {
+    render() {
+      return (
+        <button id="open-btn">Open new window</button>
+      );
+    }
   }
-}
 
-class TemplateList extends React.Component {
-  render() {
-    return (
-      <select>
+  class TemplateList extends React.Component {
+    render() {
+      return (
+        <div>
+          <select>
 
-      </select>
-    );
+          </select>
+        </div>
+      );
+    }
   }
-}
 
-class Content extends React.Component {
-  render() {
-    return
+  class Content extends React.Component {
+    render() {
+      return (
+        <div>
+          <FileInput></FileInput>
+          <SendBtn></SendBtn>
+          <AuthBtn></AuthBtn>
+          <LogutBtn></LogutBtn>
+          <PasteBtn></PasteBtn>
+          <NewWindowBtn></NewWindowBtn>
+          <TemplateList></TemplateList>
+        </div>
+      );
+    }
   }
-}
 
-ReactDOM.render(
-  <FileInput/>, <SendBtn/>, <AuthBtn/>, <LogutBtn/>, <PasteBtn/>, <NewWindowBtn/>, <TemplateList/>
-  document.getElementById('content')
-);
+
+  ReactDOM.render(
+    <Content></Content>,
+    document.getElementById('content')
+  );
+
+});
