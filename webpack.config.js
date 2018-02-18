@@ -1,17 +1,17 @@
 module.exports = {
-  entry: "./popup/index.tsx",
-  output: {
-    filename: "popup.js",
-    path: __dirname + "/popup"
-  },
+  // entry: "./popup/index.tsx",
+  // output: {
+  //   filename: "popup.js",
+  //   path: __dirname + "/popup"
+  // },
 
   // Enable sourcemaps for debugging webpack's output.
   devtool: "source-map",
 
-  resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json"]
-  },
+  // resolve: {
+  //   // Add '.ts' and '.tsx' as resolvable extensions.
+  //   extensions: [".ts", ".tsx", ".js", ".json"]
+  // },
 
   module: {
     rules: [

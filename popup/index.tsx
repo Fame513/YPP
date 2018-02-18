@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Button, Icon} from 'react-materialize'
+import {SendBtn} from './comopnents/sendBtn';
+
 
 chrome.runtime.getBackgroundPage(function (app: any) {
 
@@ -9,15 +11,7 @@ chrome.runtime.getBackgroundPage(function (app: any) {
     render() {
       return (
         <input type="file" multiple></input>
-      );
-    }
-  }
-
-  class SendBtn extends React.Component {
-    render() {
-      return (
-        <button>Send</button>
-      );
+      ); 
     }
   }
 
