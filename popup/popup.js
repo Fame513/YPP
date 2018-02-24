@@ -58,54 +58,78 @@
 	const ReactDOM = __webpack_require__(3);
 	const react_materialize_1 = __webpack_require__(4);
 	const sendBtn_1 = __webpack_require__(64);
+	class AuthBtn extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
+	    render() {
+	        return (React.createElement(react_materialize_1.Button, { onClick: this.login }, "Auth"));
+	    }
+	    login() {
+	        this.app.openAuthWindow();
+	    }
+	}
+	class FileInput extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
+	    render() {
+	        return (React.createElement("input", { type: "file", multiple: true }));
+	    }
+	}
+	class LogutBtn extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
+	    render() {
+	        return (React.createElement("button", null, "Logout"));
+	    }
+	}
+	class PasteBtn extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
+	    render() {
+	        return (React.createElement("button", { onClick: this.pasteCode }, "Paste"));
+	    }
+	    pasteCode() {
+	        console.log('past');
+	    }
+	}
+	class NewWindowBtn extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
+	    render() {
+	        return (React.createElement("button", { id: "open-btn" }, "Open new window"));
+	    }
+	}
+	class TemplateList extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
+	    render() {
+	        return (React.createElement("div", null,
+	            React.createElement("select", null)));
+	    }
+	}
 	chrome.runtime.getBackgroundPage(function (app) {
-	    class FileInput extends React.Component {
-	        render() {
-	            return (React.createElement("input", { type: "file", multiple: true }));
-	        }
-	    }
-	    class AuthBtn extends React.Component {
-	        render() {
-	            return (React.createElement(react_materialize_1.Button, { onClick: this.login }, "Auth"));
-	        }
-	        login() {
-	            app.openAuthWindow();
-	        }
-	    }
-	    class LogutBtn extends React.Component {
-	        render() {
-	            return (React.createElement("button", null, "Logout"));
-	        }
-	    }
-	    class PasteBtn extends React.Component {
-	        render() {
-	            return (React.createElement("button", { onClick: this.pasteCode }, "Paste"));
-	        }
-	        pasteCode() {
-	            console.log('past');
-	        }
-	    }
-	    class NewWindowBtn extends React.Component {
-	        render() {
-	            return (React.createElement("button", { id: "open-btn" }, "Open new window"));
-	        }
-	    }
-	    class TemplateList extends React.Component {
-	        render() {
-	            return (React.createElement("div", null,
-	                React.createElement("select", null)));
-	        }
-	    }
 	    class Content extends React.Component {
 	        render() {
 	            return (React.createElement("div", null,
-	                React.createElement(FileInput, null),
-	                React.createElement(sendBtn_1.SendBtn, null),
-	                React.createElement(AuthBtn, null),
-	                React.createElement(LogutBtn, null),
-	                React.createElement(PasteBtn, null),
-	                React.createElement(NewWindowBtn, null),
-	                React.createElement(TemplateList, null)));
+	                React.createElement(FileInput, { app: app }),
+	                React.createElement(sendBtn_1.SendBtn, { app: app }),
+	                React.createElement(AuthBtn, { app: app }),
+	                React.createElement(LogutBtn, { app: app }),
+	                React.createElement(PasteBtn, { app: app }),
+	                React.createElement(NewWindowBtn, { app: app }),
+	                React.createElement(TemplateList, { app: app })));
 	        }
 	    }
 	    ReactDOM.render(React.createElement(Content, null), document.getElementById('content'));
@@ -6623,8 +6647,15 @@
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const React = __webpack_require__(2);
 	class SendBtn extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.app = props.app;
+	    }
 	    render() {
-	        return (React.createElement("button", null, "Send"));
+	        return (React.createElement("button", { onClick: this.sendNotification }, "Send"));
+	    }
+	    sendNotification() {
+	        chrome.notifications.create('id', { message: 'message', type: 'basic', title: 'title', iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png' });
 	    }
 	}
 	exports.SendBtn = SendBtn;
@@ -6632,4 +6663,4 @@
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=41914fd8e80b91be917e.js.map
+//# sourceMappingURL=4bb983f94d9655ee1d46.js.map

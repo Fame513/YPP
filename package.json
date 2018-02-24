@@ -19,6 +19,8 @@
     "react-materialize": "^1.1.2"
   },
   "devDependencies": {
+    "@types/autobind-decorator": "^2.1.0",
+    "@types/htmlparser2": "^3.7.31",
     "awesome-typescript-loader": "^3.4.1",
     "browserify": "^16.1.0",
     "del": "^3.0.0",
