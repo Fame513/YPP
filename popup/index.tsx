@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Button, Icon} from 'react-materialize'
 import {SendBtn} from './comopnents/sendBtn';
+import {ChangeEvent} from 'react';
 
 class AuthBtn extends React.Component<{model: Model}> {
   public model: Model;
@@ -31,8 +32,12 @@ class FileInput extends React.Component<{model: Model}> {
   
   render() {
     return (
-      <input type="file" multiple></input>
+      <input type="file" multiple onChange={this.uploadFiles.bind(this)}></input>
     );
+  }
+  
+  uploadFiles(e) {
+    this.model.uploadFiles(e.target.files);
   }
 }
 

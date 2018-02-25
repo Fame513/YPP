@@ -76,7 +76,10 @@
 	        this.model = props.model;
 	    }
 	    render() {
-	        return (React.createElement("input", { type: "file", multiple: true }));
+	        return (React.createElement("input", { type: "file", multiple: true, onChange: this.uploadFiles.bind(this) }));
+	    }
+	    uploadFiles(e) {
+	        this.model.uploadFiles(e.target.files);
 	    }
 	}
 	class LogoutBtn extends React.Component {
@@ -6666,6 +6669,8 @@
 	    render() {
 	        return (React.createElement("button", { onClick: this.sendNotification }, "Send"));
 	    }
+	    uploadFiles() {
+	    }
 	    sendNotification() {
 	        chrome.notifications.create('', { message: 'message', type: 'basic', title: 'title', iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png' });
 	    }
@@ -6675,4 +6680,4 @@
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=cbd6c4678c57ebdfa90b.js.map
+//# sourceMappingURL=65949b578de9974f4010.js.map

@@ -21,13 +21,62 @@ class Model {
   user: {name: string, email: string} = {name: '', email: ''};
   onChange: () => void;
   openAuthWindow = openAuthWindow;
+  uploadFiles = uploadFiles;
+  isLoading: boolean = false;
+  progress: number = 0;
+  lastLoadedFiles: {
+    files: { name: string, duration: string }[],
+    archieName: string,
+    previewName: string,
+    imageName: string,
+    tempo: string,
+    isLoped: boolean,
+    name: string
+  }
 }
 
 const model: Model  = new Model();
 let lastLoadedData;
 let wind;
-let username;
 let updateDataCallback;
+
+function uploadFiles (files: File[]) {
+  console.log(files);
+  if (!files || files.length === 0) {
+    return;
+  }
+
+  const xhr: XMLHttpRequest = new XMLHttpRequest();
+
+  // обработчик для закачки
+  xhr.upload.onprogress = function(event) {
+    console.log( ( event.loaded / event.total) * 100);
+    model.progress = ( event.loaded / event.total) * 100;
+    model.onChange();
+  };
+
+  // обработчики успеха и ошибки
+  // если status == 200, то это успех, иначе ошибка
+  xhr.onload = xhr.onerror = function() {
+    if (this.status == 200) {
+      console.log(JSON.parse(this.response));
+    } else {
+      console.log("error " + this.status);
+    }
+    model.isLoading = false;
+  };
+
+  xhr.open("POST", "http://localhost", true);
+  const formData = new FormData();
+  for(let i = 0; i < files.length; i++) {
+    formData.append("file" + i, files[i]);
+  }
+  xhr.send(formData);
+
+  model.progress = 0;
+  model.isLoading = true;
+  model.onChange();
+}
 
 function updateData() {
   if (model.onChange) {
@@ -66,14 +115,6 @@ function openAuthWindow() {
   }, function (win) {
     wind = win;
   });
-}
-
-function saveLastData(data) {
-  lastLoadedData = data;
-}
-
-function getLastData() {
-  return lastLoadedData;
 }
 
 function loadTemplates() {
