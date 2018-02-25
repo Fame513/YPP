@@ -61,28 +61,28 @@
 	class AuthBtn extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
-	        return (React.createElement(react_materialize_1.Button, { onClick: this.login }, "Auth"));
+	        return (React.createElement(react_materialize_1.Button, { onClick: this.login.bind(this) }, "Auth"));
 	    }
 	    login() {
-	        this.app.openAuthWindow();
+	        this.model.openAuthWindow();
 	    }
 	}
 	class FileInput extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
 	        return (React.createElement("input", { type: "file", multiple: true }));
 	    }
 	}
-	class LogutBtn extends React.Component {
+	class LogoutBtn extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
 	        return (React.createElement("button", null, "Logout"));
@@ -91,7 +91,7 @@
 	class PasteBtn extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
 	        return (React.createElement("button", { onClick: this.pasteCode }, "Paste"));
@@ -103,7 +103,7 @@
 	class NewWindowBtn extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
 	        return (React.createElement("button", { id: "open-btn" }, "Open new window"));
@@ -112,27 +112,39 @@
 	class TemplateList extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
 	        return (React.createElement("div", null,
 	            React.createElement("select", null)));
 	    }
 	}
-	chrome.runtime.getBackgroundPage(function (app) {
-	    class Content extends React.Component {
-	        render() {
-	            return (React.createElement("div", null,
-	                React.createElement(FileInput, { app: app }),
-	                React.createElement(sendBtn_1.SendBtn, { app: app }),
-	                React.createElement(AuthBtn, { app: app }),
-	                React.createElement(LogutBtn, { app: app }),
-	                React.createElement(PasteBtn, { app: app }),
-	                React.createElement(NewWindowBtn, { app: app }),
-	                React.createElement(TemplateList, { app: app })));
-	        }
+	class Content extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.model = props.model;
 	    }
-	    ReactDOM.render(React.createElement(Content, null), document.getElementById('content'));
+	    render() {
+	        return (React.createElement("div", null,
+	            React.createElement("div", null, this.model.user.name),
+	            React.createElement(FileInput, { model: this.model }),
+	            React.createElement(sendBtn_1.SendBtn, { model: this.model }),
+	            React.createElement(AuthBtn, { model: this.model }),
+	            React.createElement(LogoutBtn, { model: this.model }),
+	            React.createElement(PasteBtn, { model: this.model }),
+	            React.createElement(NewWindowBtn, { model: this.model }),
+	            React.createElement(TemplateList, { model: this.model })));
+	    }
+	}
+	chrome.runtime.getBackgroundPage((app) => {
+	    const model = app.getModel();
+	    console.log(app.getModel());
+	    ReactDOM.render(React.createElement(Content, { model: model }), document.getElementById('content'));
+	    console.log(app);
+	    model.onChange = () => {
+	        console.log(app.getModel());
+	        ReactDOM.render(React.createElement(Content, { model: model }), document.getElementById('content'));
+	    };
 	});
 
 
@@ -6649,13 +6661,13 @@
 	class SendBtn extends React.Component {
 	    constructor(props) {
 	        super(props);
-	        this.app = props.app;
+	        this.model = props.model;
 	    }
 	    render() {
 	        return (React.createElement("button", { onClick: this.sendNotification }, "Send"));
 	    }
 	    sendNotification() {
-	        chrome.notifications.create('id', { message: 'message', type: 'basic', title: 'title', iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png' });
+	        chrome.notifications.create('', { message: 'message', type: 'basic', title: 'title', iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png' });
 	    }
 	}
 	exports.SendBtn = SendBtn;
@@ -6663,4 +6675,4 @@
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=4bb983f94d9655ee1d46.js.map
+//# sourceMappingURL=cbd6c4678c57ebdfa90b.js.map

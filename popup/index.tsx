@@ -3,30 +3,30 @@ import * as ReactDOM from 'react-dom';
 import {Button, Icon} from 'react-materialize'
 import {SendBtn} from './comopnents/sendBtn';
 
-class AuthBtn extends React.Component<{app: any}> {
-  public app: any;
+class AuthBtn extends React.Component<{model: Model}> {
+  public model: Model;
   constructor(props) {
     super(props);
-    this.app = props.app
+    this.model = props.model
   }
 
   render() {
     return (
-      <Button onClick={this.login}>Auth</Button>
+      <Button onClick={this.login.bind(this)}>Auth</Button>
     );
   }
 
   login() {
-    this.app.openAuthWindow();
+    this.model.openAuthWindow();
   }
 }
 
-class FileInput extends React.Component<{app: any}> {
+class FileInput extends React.Component<{model: Model}> {
 
-  public app: any;
+  public model: Model;
   constructor(props) {
     super(props);
-    this.app = props.app
+    this.model = props.model
   }
   
   render() {
@@ -36,11 +36,11 @@ class FileInput extends React.Component<{app: any}> {
   }
 }
 
-class LogutBtn extends React.Component<{app: any}> {
-  public app: any;
+class LogoutBtn extends React.Component<{model: Model}> {
+  public model: Model;
   constructor(props) {
     super(props);
-    this.app = props.app
+    this.model = props.model
   }
 
   render() {
@@ -50,11 +50,11 @@ class LogutBtn extends React.Component<{app: any}> {
   }
 }
 
-class PasteBtn extends React.Component<{app: any}> {
-  public app: any;
+class PasteBtn extends React.Component<{model: Model}> {
+  public model: Model;
   constructor(props) {
     super(props);
-    this.app = props.app
+    this.model = props.model
   }
 
   render() {
@@ -68,11 +68,11 @@ class PasteBtn extends React.Component<{app: any}> {
   }
 }
 
-class NewWindowBtn extends React.Component<{app: any}> {
-  public app: any;
+class NewWindowBtn extends React.Component<{model: Model}> {
+  public model: Model;
   constructor(props) {
     super(props);
-    this.app = props.app
+    this.model = props.model
   }
 
   render() {
@@ -82,11 +82,11 @@ class NewWindowBtn extends React.Component<{app: any}> {
   }
 }
 
-class TemplateList extends React.Component<{app: any}> {
-  public app: any;
+class TemplateList extends React.Component<{model: Model}> {
+  public model: Model;
   constructor(props) {
     super(props);
-    this.app = props.app
+    this.model = props.model
   }
 
   render() {
@@ -100,35 +100,43 @@ class TemplateList extends React.Component<{app: any}> {
   }
 }
 
-
-
-chrome.runtime.getBackgroundPage(function (app: any) {
-
-
-
-  
-
- 
-  class Content extends React.Component {
-    render() {
-      return (
-        <div>
-          <FileInput app={app}></FileInput>
-          <SendBtn  app={app}></SendBtn>
-          <AuthBtn app={app}></AuthBtn>
-          <LogutBtn  app={app}></LogutBtn>
-          <PasteBtn  app={app}></PasteBtn>
-          <NewWindowBtn  app={app}></NewWindowBtn>
-          <TemplateList  app={app}></TemplateList>
-        </div>
-      );
-    }
+class Content extends React.Component<{model: Model}> {
+  public model: Model;
+  constructor(props) {
+    super(props);
+    this.model = props.model
   }
 
+  render() {
+    return (
+      <div>
+        <div>{this.model.user.name}</div>
+        <FileInput model={this.model}></FileInput>
+        <SendBtn  model={this.model}></SendBtn>
+        <AuthBtn model={this.model}></AuthBtn>
+        <LogoutBtn model={this.model}></LogoutBtn>
+        <PasteBtn  model={this.model}></PasteBtn>
+        <NewWindowBtn  model={this.model}></NewWindowBtn>
+        <TemplateList  model={this.model}></TemplateList>
+      </div>
+    );
+  }
+}
 
+
+chrome.runtime.getBackgroundPage( (app: any) => {
+  const model: Model = app.getModel();
+  console.log(app.getModel());
   ReactDOM.render(
-    <Content></Content>,
+    <Content model={model}></Content>,
     document.getElementById('content')
   );
-
+  console.log(app);
+  model.onChange = () => {
+    console.log(app.getModel());
+    ReactDOM.render(
+      <Content model={model}></Content>,
+      document.getElementById('content')
+    );
+  };
 });

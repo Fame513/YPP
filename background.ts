@@ -18,9 +18,9 @@ interface Tokens {
 
 class Model {
   tokens: Tokens;
-  user: {name: string, email: string};
-  onChage: () => void
-
+  user: {name: string, email: string} = {name: '', email: ''};
+  onChange: () => void;
+  openAuthWindow = openAuthWindow;
 }
 
 const model: Model  = new Model();
@@ -30,9 +30,17 @@ let username;
 let updateDataCallback;
 
 function updateData() {
-  if (updateDataCallback) {
-    updateDataCallback();
+  if (model.onChange) {
+    model.onChange();
   }
+}
+
+function getModel() {
+  return model;
+}
+
+function setCallback(callback) {
+  updateDataCallback = callback;
 }
 
 chrome.runtime.onMessageExternal.addListener(
@@ -43,7 +51,7 @@ chrome.runtime.onMessageExternal.addListener(
       url: 'https://api.envato.com/v1/market/private/user/username.json',
       headers: {'Authorization': 'Bearer ' + request.tokens.access_token}
     }).done(function (data) {
-      username = data.username;
+      model.user.name = data.username;
       updateData();
     })
   });
@@ -52,7 +60,7 @@ chrome.runtime.onMessageExternal.addListener(
 function openAuthWindow() {
   chrome.windows.create({
     url: "https://api.envato.com/authorization?response_type=code&client_id=easy-music-uploader-q1haaron&redirect_uri=http://localhost/auth",
-    // type: "popup",
+    type: "popup",
     width: 655,
     height: 974
   }, function (win) {
