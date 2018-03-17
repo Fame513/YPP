@@ -76,7 +76,7 @@ window.onload = function () {
  </script>`);
 });
 
-app.listen(80);
+app.listen(process.env.PORT || 80);
 
 function ftpPutPromise(ftp: Client, input: NodeJS.ReadableStream | Buffer | string, destPath: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {

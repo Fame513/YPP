@@ -8,7 +8,8 @@ const gulp = require('gulp'),
   logger = require('gulp-logger'),
   browserify = require("browserify"),
   rename = require('gulp-rename'),
-  del = require('del')
+  del = require('del'),
+  requireModules = require('gulp-require-modules')
   gulpCopy = require('gulp-copy');
 
 const popupSrc = 'popup/**/*.tsx';

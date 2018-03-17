@@ -7,6 +7,9 @@ const config = {
   messagingSenderId: '95008419704'
 };
 
+const envatoClilentId = 'easy-music-uploader-q1haaron';
+const serverUrl = 'https://audiojungle-uploader.herokuapp.com'
+
 firebase.initializeApp(config);
 const db = firebase.firestore();
 
@@ -41,7 +44,6 @@ class Model {
 }
 
 const model: Model  = new Model();
-let lastLoadedData;
 let wind;
 let updateDataCallback;
 
@@ -80,7 +82,7 @@ function uploadFiles (files: File[]) {
     model.onChange();
   };
 
-  xhr.open("POST", "http://localhost", true);
+  xhr.open("POST", serverUrl, true);
   const formData = new FormData();
   for(let i = 0; i < files.length; i++) {
     formData.append("file" + i, files[i]);
@@ -122,7 +124,7 @@ chrome.runtime.onMessageExternal.addListener(
 
 function openAuthWindow() {
   chrome.windows.create({
-    url: "https://api.envato.com/authorization?response_type=code&client_id=easy-music-uploader-q1haaron&redirect_uri=http://localhost/auth",
+    url: `https://api.envato.com/authorization?response_type=code&client_id=${envatoClilentId}&redirect_uri=${serverUrl}/auth`,
     type: "popup",
     width: 655,
     height: 974
