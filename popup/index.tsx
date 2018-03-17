@@ -1,14 +1,15 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {Button, Icon} from 'react-materialize'
+import {Button, Icon, Input, Row, ProgressBar, Preloader} from 'react-materialize';
 import {SendBtn} from './comopnents/sendBtn';
 import {ChangeEvent} from 'react';
 
-class AuthBtn extends React.Component<{model: Model}> {
+class AuthBtn extends React.Component<{ model: Model }> {
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
 
   render() {
@@ -22,30 +23,32 @@ class AuthBtn extends React.Component<{model: Model}> {
   }
 }
 
-class FileInput extends React.Component<{model: Model}> {
+class FileInput extends React.Component<{ model: Model }> {
 
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
-  
+
   render() {
     return (
       <input type="file" multiple onChange={this.uploadFiles.bind(this)}></input>
     );
   }
-  
+
   uploadFiles(e) {
     this.model.uploadFiles(e.target.files);
   }
 }
 
-class LogoutBtn extends React.Component<{model: Model}> {
+class LogoutBtn extends React.Component<{ model: Model }> {
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
 
   render() {
@@ -55,29 +58,31 @@ class LogoutBtn extends React.Component<{model: Model}> {
   }
 }
 
-class PasteBtn extends React.Component<{model: Model}> {
+class PasteBtn extends React.Component<{ model: Model }> {
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
 
   render() {
     return (
-      <button onClick={this.pasteCode}>Paste</button>
+      <button onClick={this.pasteCode.bind(this)}>Paste</button>
     );
   }
 
   pasteCode() {
-    console.log('past');
+   this.model.pasteData();
   }
 }
 
-class NewWindowBtn extends React.Component<{model: Model}> {
+class NewWindowBtn extends React.Component<{ model: Model }> {
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
 
   render() {
@@ -87,49 +92,91 @@ class NewWindowBtn extends React.Component<{model: Model}> {
   }
 }
 
-class TemplateList extends React.Component<{model: Model}> {
+class Progress extends React.Component<{ model: Model }> {
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
 
   render() {
+    if (this.model.isLoading) {
+      if (this.model.progress === 100) {
+        return (
+          <Row>
+            <Preloader size='small'/>
+          </Row>
+        );
+      } else {
+        return (
+          <Row>
+            <ProgressBar progress={this.model.progress}/>
+          </Row>
+        );
+      }
+    } else {
+      return ''
+    }
+  }
+}
+
+class TemplateList extends React.Component<{ model: Model }> {
+  public model: Model;
+
+  constructor(props) {
+    super(props);
+    this.model = props.model;
+  }
+
+  handleInputChange(e) {
+    this.model.selectedTemplate = +e.target.value;
+    this.model.onChange();
+  }
+
+  render() {
+    const list = this.model.templates.map((temp, i) => <option value={i}>{temp.name}</option>);
     return (
       <div>
-        <select>
-
-        </select>
+        <Row>
+          <Input type='select' label="Templte" defaultValue={this.model.selectedTemplate}
+                 onChange={this.handleInputChange.bind(this)} >
+            {list}
+          </Input>
+        </Row>
       </div>
     );
   }
 }
 
-class Content extends React.Component<{model: Model}> {
+class Content extends React.Component<{ model: Model }> {
   public model: Model;
+
   constructor(props) {
     super(props);
-    this.model = props.model
+    this.model = props.model;
   }
 
   render() {
     return (
       <div>
         <div>{this.model.user.name}</div>
+        <div>{this.model.lastLoadedFiles ? this.model.lastLoadedFiles.name : ''}</div>
+        <Progress model={this.model}/>
+        <TemplateList model={this.model}></TemplateList>
         <FileInput model={this.model}></FileInput>
-        <SendBtn  model={this.model}></SendBtn>
+        <SendBtn model={this.model}></SendBtn>
         <AuthBtn model={this.model}></AuthBtn>
         <LogoutBtn model={this.model}></LogoutBtn>
-        <PasteBtn  model={this.model}></PasteBtn>
-        <NewWindowBtn  model={this.model}></NewWindowBtn>
-        <TemplateList  model={this.model}></TemplateList>
+        <PasteBtn model={this.model}></PasteBtn>
+        <NewWindowBtn model={this.model}></NewWindowBtn>
       </div>
     );
   }
 }
 
 
-chrome.runtime.getBackgroundPage( (app: any) => {
+chrome.runtime.getBackgroundPage((app: any) => {
   const model: Model = app.getModel();
   console.log(app.getModel());
   ReactDOM.render(

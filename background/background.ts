@@ -16,14 +16,19 @@ interface Tokens {
   expires: number;
 }
 
+interface Template {category: string, description: string, name: string, tags: string}
+
 class Model {
   tokens: Tokens;
   user: {name: string, email: string} = {name: '', email: ''};
-  onChange: () => void;
+  onChange: () => void = () => {};
   openAuthWindow = openAuthWindow;
   uploadFiles = uploadFiles;
   isLoading: boolean = false;
   progress: number = 0;
+  templates: Template[] = [];
+  selectedTemplate: number = 0;
+  pasteData = pasteData;
   lastLoadedFiles: {
     files: { name: string, duration: string }[],
     archieName: string,
@@ -39,6 +44,12 @@ const model: Model  = new Model();
 let lastLoadedData;
 let wind;
 let updateDataCallback;
+
+loadTemplates().then((result) => {
+  console.log(result);
+  model.templates = result;
+  model.onChange();
+});
 
 function uploadFiles (files: File[]) {
   console.log(files);
@@ -59,11 +70,14 @@ function uploadFiles (files: File[]) {
   // если status == 200, то это успех, иначе ошибка
   xhr.onload = xhr.onerror = function() {
     if (this.status == 200) {
+      model.lastLoadedFiles = JSON.parse(this.response);
       console.log(JSON.parse(this.response));
+      sendNotification('Files uploaded', 'Files uploaded successful')
     } else {
       console.log("error " + this.status);
     }
     model.isLoading = false;
+    model.onChange();
   };
 
   xhr.open("POST", "http://localhost", true);
@@ -125,4 +139,14 @@ function loadTemplates() {
     });
     return data;
   });
+}
+
+function pasteData() {
+  chrome.tabs.query({active: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {data: model.lastLoadedFiles, template: model.templates[model.selectedTemplate]});
+  });
+}
+
+function sendNotification(title: string, message: string) {
+  chrome.notifications.create('', {message: message, type: 'basic', title: title, iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png'})
 }

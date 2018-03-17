@@ -64,9 +64,10 @@ app.post('/', async (req, res) => {
 app.get('/auth', async (req, res) => {
   
   const result = await EnvatoApi.getTokens(req.query.code);
-  const appId = 'jkkmjcgdgofecnamfeoldhohfckencih'
+  const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm'
   // const user = await EnvatoApi.getUserInfo(result.access_token);
   // console.log(user);
+  console.log('logged');
 
   res.send(`<script>
 window.onload = function () {

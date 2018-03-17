@@ -89,7 +89,7 @@ gulp.task('build:plugin:background', ['build:plugin:popup'], function () {
 });
 
 gulp.task('build:server', function () {
-  return gulp.src('server/index.ts')
+  return gulp.src('server/*.ts')
     .pipe(tsServer())
     .js
     .pipe(gulp.dest('dist/server'))
