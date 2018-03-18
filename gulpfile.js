@@ -50,7 +50,7 @@ gulp.task('build:plugin:popup', function () {
     .pipe(gulp.dest('dist/plugin/popup'))
 });
 
-gulp.task('copy', ['copy:manifest', 'copy:scripts', 'copy:options', 'copy:content', 'copy:popup.html']);
+gulp.task('copy', ['copy:manifest', 'copy:scripts', 'copy:content', 'copy:popup.html']);
 
 gulp.task('copy:manifest', function () {
   gulp
@@ -61,12 +61,6 @@ gulp.task('copy:manifest', function () {
 gulp.task('copy:scripts', function () {
   gulp
     .src('scripts/**')
-    .pipe(gulpCopy('dist/plugin'))
-});
-
-gulp.task('copy:options', function () {
-  gulp
-    .src('options/**')
     .pipe(gulpCopy('dist/plugin'))
 });
 
