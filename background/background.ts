@@ -8,7 +8,7 @@ const config = {
 };
 
 const envatoClilentId = 'easy-music-uploader-q1haaron';
-const serverUrl = 'https://audiojungle-uploader.herokuapp.com'
+const serverUrl = 'https://audiojungle-uploader.herokuapp.com';
 
 firebase.initializeApp(config);
 const db = firebase.firestore();
@@ -19,12 +19,18 @@ interface Tokens {
   expires: number;
 }
 
-interface Template {category: string, description: string, name: string, tags: string}
+interface Template {
+  category: string,
+  description: string,
+  name: string,
+  tags: string
+}
 
 class Model {
   tokens: Tokens;
-  user: {name: string, email: string} = {name: '', email: ''};
-  onChange: () => void = () => {};
+  user: { name: string, email: string } = {name: '', email: ''};
+  onChange: () => void = () => {
+  };
   openAuthWindow = openAuthWindow;
   uploadFiles = uploadFiles;
   isLoading: boolean = false;
@@ -32,6 +38,7 @@ class Model {
   templates: Template[] = [];
   selectedTemplate: number = 0;
   pasteData = pasteData;
+  logout = logout;
   lastLoadedFiles: {
     files: { name: string, duration: string }[],
     archieName: string,
@@ -40,10 +47,10 @@ class Model {
     tempo: string,
     isLoped: boolean,
     name: string
-  }
+  };
 }
 
-const model: Model  = new Model();
+const model: Model = new Model();
 let wind;
 let updateDataCallback;
 
@@ -53,7 +60,7 @@ loadTemplates().then((result) => {
   model.onChange();
 });
 
-function uploadFiles (files: File[]) {
+function uploadFiles(files: File[]) {
   console.log(files);
   if (!files || files.length === 0) {
     return;
@@ -62,30 +69,30 @@ function uploadFiles (files: File[]) {
   const xhr: XMLHttpRequest = new XMLHttpRequest();
 
   // обработчик для закачки
-  xhr.upload.onprogress = function(event) {
-    console.log( ( event.loaded / event.total) * 100);
-    model.progress = ( event.loaded / event.total) * 100;
+  xhr.upload.onprogress = function (event) {
+    console.log((event.loaded / event.total) * 100);
+    model.progress = (event.loaded / event.total) * 100;
     model.onChange();
   };
 
   // обработчики успеха и ошибки
   // если status == 200, то это успех, иначе ошибка
-  xhr.onload = xhr.onerror = function() {
+  xhr.onload = xhr.onerror = function () {
     if (this.status == 200) {
       model.lastLoadedFiles = JSON.parse(this.response);
       console.log(JSON.parse(this.response));
-      sendNotification('Files uploaded', 'Files uploaded successful')
+      sendNotification('Files uploaded', 'Files uploaded successful');
     } else {
-      console.log("error " + this.status);
+      console.log('error ' + this.status);
     }
     model.isLoading = false;
     model.onChange();
   };
 
-  xhr.open("POST", serverUrl, true);
+  xhr.open('POST', serverUrl, true);
   const formData = new FormData();
-  for(let i = 0; i < files.length; i++) {
-    formData.append("file" + i, files[i]);
+  for (let i = 0; i < files.length; i++) {
+    formData.append('file' + i, files[i]);
   }
   xhr.send(formData);
 
@@ -108,24 +115,34 @@ function setCallback(callback) {
   updateDataCallback = callback;
 }
 
+function logout() {
+  model.user = {name: '', email: ''};
+  model.onChange();
+
+}
+
 chrome.runtime.onMessageExternal.addListener(
-  function(request, sender, sendResponse) {
+  function (request, sender, sendResponse) {
     chrome.windows.remove(wind.id);
     console.log(request.tokens);
-    $.ajax({
-      url: 'https://api.envato.com/v1/market/private/user/username.json',
-      headers: {'Authorization': 'Bearer ' + request.tokens.access_token}
-    }).done(function (data) {
-      model.user.name = data.username;
-      updateData();
-    })
+    const headers = {'Authorization': 'Bearer ' + request.tokens.access_token};
+    Promise.all([
+      fetch('https://api.envato.com/v1/market/private/user/username.json', {headers}),
+      fetch('https://api.envato.com/v1/market/private/user/email.json', {headers})
+    ])
+      .then(([name, email]) => Promise.all([name.json(), email.json()]))
+      .then(([name, email]) => {
+        model.user.name = name.username;
+        model.user.email = email.email;
+        updateData();
+      });
   });
 
 
 function openAuthWindow() {
   chrome.windows.create({
     url: `https://api.envato.com/authorization?response_type=code&client_id=${envatoClilentId}&redirect_uri=${serverUrl}/auth`,
-    type: "popup",
+    type: 'popup',
     width: 655,
     height: 974
   }, function (win) {
@@ -136,7 +153,7 @@ function openAuthWindow() {
 function loadTemplates() {
   return db.collection('templates').get().then(function (querySnapshot) {
     const data = [];
-    querySnapshot.forEach(function(doc) {
+    querySnapshot.forEach(function (doc) {
       data.push(doc.data());
     });
     return data;
@@ -144,11 +161,19 @@ function loadTemplates() {
 }
 
 function pasteData() {
-  chrome.tabs.query({active: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {data: model.lastLoadedFiles, template: model.templates[model.selectedTemplate]});
+  chrome.tabs.query({active: true}, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {
+      data: model.lastLoadedFiles,
+      template: model.templates[model.selectedTemplate]
+    });
   });
 }
 
 function sendNotification(title: string, message: string) {
-  chrome.notifications.create('', {message: message, type: 'basic', title: title, iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png'})
+  chrome.notifications.create('', {
+    message: message,
+    type: 'basic',
+    title: title,
+    iconUrl: 'https://habrastorage.org/getpro/habr/avatars/4ec/bd0/85d/4ecbd085d692835a931d03174ff19539.png'
+  });
 }
