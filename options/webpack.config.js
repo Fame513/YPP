@@ -38,6 +38,14 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000,
+          name: path.posix.join('assets', 'fonts/[name].[hash:7].[ext]')
+        }
       }
     ]
   },
@@ -55,8 +63,14 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
-}
+  devtool: '#eval-source-map',
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
+    })
+  ]
+};
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map';
@@ -77,6 +91,7 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
-    new CopyWebpackPlugin([{from: './index.html', to: '..'}])
+    new CopyWebpackPlugin([{from: './index.html', to: '..'},
+      {from: './src/assets', to: './assets'}])
   ])
 }

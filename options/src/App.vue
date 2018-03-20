@@ -33,8 +33,12 @@
           </v-list>
         </v-navigation-drawer>
         <v-content>
-          <v-container fluid>
-            {{selectedTemplate ? selectedTemplate.name : ''}}
+          <v-container fluid v-if="selectedTemplate">
+            <v-text-field label="Name" v-model="selectedTemplate.name"/>
+            <v-text-field label="Category" v-model="selectedTemplate.category"/>
+            <froala :tag="'textarea'" :config="config" v-model="selectedTemplate.description"/>
+            <v-text-field label="Tags" multi-line v-model="selectedTemplate.tags"/>
+            <v-btn @click="saveTemplate(selectedTemplate)">Save</v-btn>
           </v-container>
         </v-content>
       </v-tab-item>
@@ -42,9 +46,9 @@
       <v-tab-item :id="options" :key="options">
         <v-content>
           <v-container fluid>
-            Api key <input v-model="apiKey"/>
-            <button @click="saveKey">Save</button>
-            <v-btn color="success">Success</v-btn>
+            <input v-model="apiKey"/>
+            <v-text-field label="Api key" v-model="apiKey"/>
+            <v-btn color="success" @click="saveKey">Save</v-btn>
           </v-container>
         </v-content>
       </v-tab-item>
@@ -64,7 +68,11 @@
         templates: [],
         selectedTemplate: null,
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        model: 'temp'
+        model: 'temp',
+        config: {
+          iframe: true,
+          iframeStyleFiles: ['/options/dist/assets/description.css']
+        }
       };
     },
     props: ['app'],
@@ -83,6 +91,9 @@
             console.error(err);
           });
         }
+      },
+      saveTemplate(template) {
+        db.collection('templates').doc(template.id).set(template);
       }
     }
   };
