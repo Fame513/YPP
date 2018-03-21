@@ -1,7 +1,7 @@
 <template>
   <v-app>
 
-    <v-toolbar color="cyan" dark tabs height="48" app>
+    <v-toolbar color="cyan" dark tabs height="48" app >
       <v-tabs
         color="cyan"
         slider-color="yellow"
@@ -67,11 +67,43 @@
         apiKey: '',
         templates: [],
         selectedTemplate: null,
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
         model: 'temp',
         config: {
           iframe: true,
-          iframeStyleFiles: ['/options/dist/assets/description.css']
+          iframeStyleFiles: ['/options/dist/assets/description.css'],
+          htmlAllowedAttrs: ['href', 'src'],
+          htmlAllowedStyleProps: [],
+          toolbarSticky: false,
+          zIndex: 1,
+          pasteDeniedAttrs: ['accept', 'accept-charset', 'accesskey', 'action', 'align', 'allowfullscreen', 'allowtransparency', 'alt', 'async', 'autocomplete', 'autofocus', 'autoplay', 'autosave', 'background', 'bgcolor', 'border', 'charset', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'color', 'cols', 'colspan', 'content', 'contenteditable', 'contextmenu', 'controls', 'coords', 'data', 'data-.*', 'datetime', 'default', 'defer', 'dir', 'dirname', 'disabled', 'download', 'draggable', 'dropzone', 'enctype', 'for', 'form', 'formaction', 'frameborder', 'headers', 'height', 'hidden', 'high', 'hreflang', 'http-equiv', 'icon', 'id', 'ismap', 'itemprop', 'keytype', 'kind', 'label', 'lang', 'language', 'list', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'mozallowfullscreen', 'multiple', 'muted', 'name', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'reversed', 'rows', 'rowspan', 'sandbox', 'scope', 'scoped', 'scrolling', 'seamless', 'selected', 'shape', 'size', 'sizes', 'span', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'summary', 'spellcheck', 'style', 'tabindex', 'target', 'title', 'type', 'translate', 'usemap', 'value', 'valign', 'webkitallowfullscreen', 'width', 'wrap'],
+          imageMultipleStyles: false,
+          imageResize: false,
+          imageStyles: {},
+          toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'paragraphFormat', 'formatOL', 'formatUL', 'quote', '-',
+            'html', 'fullscreen', 'insertLink', 'insertImage', 'insertTable', '|', 'specialCharacters', 'clearFormatting', '|', 'undo', 'redo', '|', 'help',],
+          imageEditButtons: ['imageReplace', 'imageRemove', '|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', 'imageAlt'],
+          quickInsertButtons: ['image', 'table', 'ul', 'ol'],
+          quickInsertTags: ['p', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'blockquote'],
+          tableEditButtons: ['tableHeader', 'tableRemove', '|', 'tableRows', 'tableColumns', 'tableCells'],
+          htmlAllowedTags: ['a', 'b', 'blockquote', 'br', 'cite', 'code', 'del', 'em', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'img', 'ins', 'kbd', 'li', 'ol', 'p', 'pre', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'th', 'tr', 'u', 'ul'],
+          tableResizer: false,
+          tableStyles: {},
+          linkEditButtons: ['linkOpen', 'linkEdit', 'linkRemove'],
+          inlineStyles: {},
+          linkStyles: {},
+          paragraphStyles: {},
+          tableCellStyles: {},
+          paragraphFormat: {
+            N: 'Normal',
+            H2: 'Heading 2',
+            H3: 'Heading 3',
+            H4: 'Heading 4',
+            H5: 'Heading 5',
+            H6: 'Heading 6',
+            PRE: 'Pre',
+            CODE: 'Code',
+            KBD: 'Kbd',
+          }
         }
       };
     },
@@ -102,5 +134,9 @@
 <style>
   .tabs {
     height: 100%;
+  }
+
+  .toolbar {
+    z-index: 10;
   }
 </style>
