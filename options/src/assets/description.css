@@ -271,9 +271,9 @@ pre {
 }
 
 
-body table td, body table th {
-  border: inherit;
-}
+/*body table td, body table th {*/
+  /*border: inherit;*/
+/*}*/
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -324,8 +324,8 @@ body img {
 }
 
 body blockquote {
-  border-left: 1px solid #454545;
-  color: #777;
+  border-left: 1px solid #454545; !important;
+  color: #777; !important;
   font-style: italic;
   margin-bottom: 20px;
   padding-left: 20px
