@@ -6,6 +6,7 @@ import {UploadedFile} from 'express-fileupload';
 import * as JSZip from 'jszip';
 import * as path from 'path';
 import {EnvatoApi} from './envatoApi';
+import {FirebaseApi} from './firebaseApi';
 
 const app = express();
 
@@ -62,16 +63,17 @@ app.post('/', async (req, res) => {
 });
 
 app.get('/auth', async (req, res) => {
-  
+
+  const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm';
   const result = await EnvatoApi.getTokens(req.query.code);
-  const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm'
+  const firebaseToken = await FirebaseApi.authUser(result.access_token);
   // const user = await EnvatoApi.getUserInfo(result.access_token);
   // console.log(user);
   console.log('logged');
 
   res.send(`<script>
 window.onload = function () {
-  chrome.runtime.sendMessage('${appId}', {method: 'receiveCode', tokens: JSON.parse('${JSON.stringify(result)}')});
+  chrome.runtime.sendMessage('${appId}', {method: 'receiveCode', token: '${firebaseToken}'});
  }
  </script>`);
 });

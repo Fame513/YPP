@@ -121,21 +121,30 @@ function logout() {
 
 }
 
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    model.user.name = user.displayName;
+    model.user.email = user.email;
+    updateData();
+  }
+});
+
 chrome.runtime.onMessageExternal.addListener(
   function (request, sender, sendResponse) {
     chrome.windows.remove(wind.id);
-    console.log(request.tokens);
-    const headers = {'Authorization': 'Bearer ' + request.tokens.access_token};
-    Promise.all([
-      fetch('https://api.envato.com/v1/market/private/user/username.json', {headers}),
-      fetch('https://api.envato.com/v1/market/private/user/email.json', {headers})
-    ])
-      .then(([name, email]) => Promise.all([name.json(), email.json()]))
-      .then(([name, email]) => {
-        model.user.name = name.username;
-        model.user.email = email.email;
-        updateData();
-      });
+    console.log(request.token);
+    firebase.auth().signInWithCustomToken(request.token);
+    // const headers = {'Authorization': 'Bearer ' + request.tokens.access_token};
+    // Promise.all([
+    //   fetch('https://api.envato.com/v1/market/private/user/username.json', {headers}),
+    //   fetch('https://api.envato.com/v1/market/private/user/email.json', {headers})
+    // ])
+    //   .then(([name, email]) => Promise.all([name.json(), email.json()]))
+    //   .then(([name, email]) => {
+    //     model.user.name = name.username;
+    //     model.user.email = email.email;
+    //     updateData();
+    //   });
   });
 
 

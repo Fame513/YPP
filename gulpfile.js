@@ -70,6 +70,12 @@ gulp.task('copy:content', function () {
     .pipe(gulpCopy('dist/plugin'))
 });
 
+gulp.task('copy:server', function () {
+  gulp
+    .src(['server/package.json', 'server/yppy-firebase.json'])
+    .pipe(gulpCopy('dist/plugin'))
+});
+
 gulp.task('copy:popup.html', function () {
   gulp
     .src('popup/popup.html')
