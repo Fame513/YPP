@@ -16,7 +16,7 @@ import 'font-awesome/css/font-awesome.css'
 import 'froala-editor/css/froala_style.min.css'
 
 import VueFroala from 'vue-froala-wysiwyg'
-Vue.use(VueFroala)
+Vue.use(VueFroala);
 
 Vue.use(Vuetify);
 Vue.use(VueFire);

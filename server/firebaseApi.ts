@@ -8,7 +8,14 @@ admin.initializeApp({
   databaseURL: "https://yppy-1356c.firebaseio.com"
 });
 
+export type UserData = Account & Email & UserName & {apiKey: string};
+
 export class FirebaseApi {
+  
+  static async getUserByToken(firebaseToken: string): Promise<admin.auth.UserRecord> {
+    const tokenData = await admin.auth().verifyIdToken(firebaseToken);
+    return admin.auth().getUser(tokenData.uid);
+  }
   
   static async authUser(accessToken: string): Promise<string> {
     const user = await EnvatoApi.getFullUserData(accessToken);
@@ -18,7 +25,7 @@ export class FirebaseApi {
     console.log(firebaseUser);
 
     await admin.auth().updateUser(firebaseUser.uid, {displayName: user.username, photoURL: user.account.image});
-    await admin.firestore().collection('users').doc(firebaseUser.uid).set(user);
+    await admin.firestore().collection('users').doc(firebaseUser.uid).update(user);
     
     return await admin.auth().createCustomToken(firebaseUser.uid);
   }
@@ -42,5 +49,9 @@ export class FirebaseApi {
     });
     
     return firebaseUser;
+  }
+
+  static async getUserData(uid: string): Promise<UserData> {
+    return (await admin.firestore().collection('users').doc(uid).get()).data() as UserData;
   }
 }

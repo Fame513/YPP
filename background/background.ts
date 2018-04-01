@@ -54,13 +54,10 @@ const model: Model = new Model();
 let wind;
 let updateDataCallback;
 
-loadTemplates().then((result) => {
-  console.log(result);
-  model.templates = result;
-  model.onChange();
-});
+loadTemplates();
 
-function uploadFiles(files: File[]) {
+async function uploadFiles(files: File[]) {
+  const token = await firebase.auth().currentUser.getIdToken();
   console.log(files);
   if (!files || files.length === 0) {
     return;
@@ -94,6 +91,7 @@ function uploadFiles(files: File[]) {
   for (let i = 0; i < files.length; i++) {
     formData.append('file' + i, files[i]);
   }
+  xhr.setRequestHeader('Authorization', token);
   xhr.send(formData);
 
   model.progress = 0;
@@ -115,10 +113,10 @@ function setCallback(callback) {
   updateDataCallback = callback;
 }
 
-function logout() {
+async function logout() {
+  await firebase.auth().signOut();
   model.user = {name: '', email: ''};
   model.onChange();
-
 }
 
 firebase.auth().onAuthStateChanged(user => {
@@ -134,17 +132,6 @@ chrome.runtime.onMessageExternal.addListener(
     chrome.windows.remove(wind.id);
     console.log(request.token);
     firebase.auth().signInWithCustomToken(request.token);
-    // const headers = {'Authorization': 'Bearer ' + request.tokens.access_token};
-    // Promise.all([
-    //   fetch('https://api.envato.com/v1/market/private/user/username.json', {headers}),
-    //   fetch('https://api.envato.com/v1/market/private/user/email.json', {headers})
-    // ])
-    //   .then(([name, email]) => Promise.all([name.json(), email.json()]))
-    //   .then(([name, email]) => {
-    //     model.user.name = name.username;
-    //     model.user.email = email.email;
-    //     updateData();
-    //   });
   });
 
 
@@ -160,13 +147,14 @@ function openAuthWindow() {
 }
 
 function loadTemplates() {
-  return db.collection('templates').get().then(function (querySnapshot) {
+  db.collection('templates').onSnapshot((function (querySnapshot) {
     const data = [];
     querySnapshot.forEach(function (doc) {
       data.push(doc.data());
     });
-    return data;
-  });
+    model.templates = data;
+    model.onChange();
+  }));
 }
 
 function pasteData() {

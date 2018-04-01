@@ -6,18 +6,44 @@ import {UploadedFile} from 'express-fileupload';
 import * as JSZip from 'jszip';
 import * as path from 'path';
 import {EnvatoApi} from './envatoApi';
-import {FirebaseApi} from './firebaseApi';
+import {FirebaseApi, UserData} from './firebaseApi';
+import { Request, Response, NextFunction } from 'express';
+import * as admin from 'firebase-admin';
 
 const app = express();
 
 app.use(fileUpload());
 
-function formatTime(time) {
-  time = Math.floor(time);
-  return Math.floor(time / 60) + ':' + (time % 60);
-}
+app.get('/auth', async (req, res) => {
 
-app.post('/', async (req, res) => {
+  const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm';
+  const result = await EnvatoApi.getTokens(req.query.code);
+  const firebaseToken = await FirebaseApi.authUser(result.access_token);
+
+  res.send(`<script>
+window.onload = function () {
+  chrome.runtime.sendMessage('${appId}', {method: 'receiveCode', token: '${firebaseToken}'});
+ }
+ </script>`);
+});
+
+
+app.use(async (req: Request, res: Response, nest: NextFunction) => {
+  const token = req.header('authorization');
+  if (!token) {
+    return res.sendStatus(401);
+  }
+  try {
+    req.user = await FirebaseApi.getUserByToken(token);
+    nest();
+  } catch (err) {
+    console.error(err);
+    return res.sendStatus(401);
+  }
+});
+
+app.post('/', async (req: Request, res: Response) => {
+  const userData: UserData = await FirebaseApi.getUserData(req.user.uid);
   const files: UploadedFile[] = getFileArray(req.files);
   const mainFile = getMainFile(files);
   console.log('mainFile', mainFile.name);
@@ -37,11 +63,11 @@ app.post('/', async (req, res) => {
   
   const durations = await getFilesDuration(getMp3Only(filesForArchive));
   console.log('durations', durations);
-
+  // 'ybcd1n34ipoh4dkera1a1t1563dqhjn9'
   const ftp = await connectFtp(
     'ftp.marketplace.envato.com', 
-    'Fame25', 
-    'ybcd1n34ipoh4dkera1a1t1563dqhjn9');
+    userData.username, 
+    userData.apiKey);
   await ftpPutPromise(ftp, archive, trackName + '.zip');
   await ftpPutPromise(ftp, imageFile.data, imageFile.name);
   await ftpPutPromise(ftp, previewFile.data, previewFile.name);
@@ -62,23 +88,13 @@ app.post('/', async (req, res) => {
 
 });
 
-app.get('/auth', async (req, res) => {
-
-  const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm';
-  const result = await EnvatoApi.getTokens(req.query.code);
-  const firebaseToken = await FirebaseApi.authUser(result.access_token);
-  // const user = await EnvatoApi.getUserInfo(result.access_token);
-  // console.log(user);
-  console.log('logged');
-
-  res.send(`<script>
-window.onload = function () {
-  chrome.runtime.sendMessage('${appId}', {method: 'receiveCode', token: '${firebaseToken}'});
- }
- </script>`);
-});
-
 app.listen(process.env.PORT || 80);
+
+function formatTime(time) {
+  time = Math.floor(time);
+  return Math.floor(time / 60) + ':' + (time % 60);
+}
+
 
 function ftpPutPromise(ftp: Client, input: NodeJS.ReadableStream | Buffer | string, destPath: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {

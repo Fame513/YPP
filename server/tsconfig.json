@@ -5,7 +5,11 @@
     "sourceMap": true,
     "lib": ["es6"]
   },
+  "include": ["**/*.ts"],
   "exclude": [
     "node_modules"
+  ],
+  "files": [
+    "custom.d.ts"
   ]
 }
