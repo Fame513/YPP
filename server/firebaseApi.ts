@@ -25,7 +25,7 @@ export class FirebaseApi {
     console.log(firebaseUser);
 
     await admin.auth().updateUser(firebaseUser.uid, {displayName: user.username, photoURL: user.account.image});
-    await admin.firestore().collection('users').doc(firebaseUser.uid).update(user);
+    await admin.firestore().collection('users').doc(firebaseUser.uid).set(user, {merge: true});
     
     return await admin.auth().createCustomToken(firebaseUser.uid);
   }

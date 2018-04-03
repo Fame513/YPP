@@ -16,7 +16,8 @@ app.use(fileUpload());
 
 app.get('/auth', async (req, res) => {
 
-  const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm';
+  // const appId = 'lddpoohhbghmmppbfgkgbhcjbahglcbm';
+  const appId = 'dehiomlpbnfjmjmogjbmkpbhhgjcilbg';
   const result = await EnvatoApi.getTokens(req.query.code);
   const firebaseToken = await FirebaseApi.authUser(result.access_token);
 
@@ -63,7 +64,6 @@ app.post('/', async (req: Request, res: Response) => {
   
   const durations = await getFilesDuration(getMp3Only(filesForArchive));
   console.log('durations', durations);
-  // 'ybcd1n34ipoh4dkera1a1t1563dqhjn9'
   const ftp = await connectFtp(
     'ftp.marketplace.envato.com', 
     userData.username, 
