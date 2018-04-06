@@ -96,6 +96,13 @@ gulp.task('build:server', function () {
     .pipe(gulp.dest('dist/server'))
 });
 
+gulp.task('build:options', function () {
+  return gulp.src('options/src/main.js')
+    .pipe(webpackStreem( require('./options/webpack.config.js') ))
+    .pipe(gulp.dest('dist/plugin/option'))
+    .pipe(connect.reload());
+});
+
 gulp.task('watcher',function(){
   gulp.watch(popupSrc, ['default']);
 });

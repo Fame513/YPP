@@ -51,7 +51,9 @@
               single-line
             ></v-select>
             <v-text-field label="Category" v-model="selectedTemplate.category"/>
-            <froala :tag="'textarea'" :config="config" v-model="selectedTemplate.description"/>
+            <div id="flora-wrap">
+              <froala :tag="'textarea'" :config="config" v-model="selectedTemplate.description"/>
+            </div>
             <v-text-field label="Tags" multi-line v-model="selectedTemplate.tags"/>
             <v-btn @click="deleteTemplate(selectedTemplate.id)" color="error">Delete</v-btn>
             <v-btn @click="saveTemplate(selectedTemplate)" color="success">Save</v-btn>
@@ -173,9 +175,9 @@
         selectedTab: 0,
         selectedTemplate: null,
         config: {
+          width: '648',
           heightMin: 96,
-          iframe: true,
-          iframeStyleFiles: ['/options/dist/assets/description.css'],
+          // iframe: true,
           htmlAllowedAttrs: ['href', 'src'],
           htmlAllowedStyleProps: [],
           toolbarSticky: false,
@@ -188,7 +190,6 @@
           imageDefaultWidth: 0,
           imageDefaultAlign: 'left',
           imageDefaultDisplay: 'inline',
-          iframeDefaultStyle: '',
           toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'paragraphFormat', 'formatOL', 'formatUL', 'quote',
             'html', 'fullscreen', 'insertLink', 'insertImage', 'insertTable', 'trackList', '|', 'specialCharacters', 'clearFormatting', '|', 'undo', 'redo', '|', 'help',],
           imageEditButtons: ['imageReplace', 'imageRemove', '|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', 'imageAlt'],
@@ -285,4 +286,392 @@
   .selected {
     background-color: cyan;
   }
+
+  #flora-wrap .fr-wrapper * {
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #545454;
+  }
+
+
+  #flora-wrap .fr-wrapper a {
+    color: #0084B4;
+    text-decoration: none
+  }
+
+  #flora-wrap .fr-wrapper a:hover, #flora-wrap .fr-wrapper a:focus {
+    text-decoration: underline
+  }
+
+  #flora-wrap .fr-wrapper h1, #flora-wrap .fr-wrapper h2, #flora-wrap .fr-wrapper h3, #flora-wrap .fr-wrapper h4, #flora-wrap .fr-wrapper h5, #flora-wrap .fr-wrapper h6 {
+    padding: 10px 0px 20px 0px;
+    color: #545454;
+    font-weight: inherit
+  }
+
+  #flora-wrap .fr-wrapper h1 {
+    font-size: 37px;
+    line-height: 44px;
+    padding: 12px 0px 10px 0px
+  }
+
+  #flora-wrap .fr-wrapper h2 {
+    font-size: 27px;
+    line-height: 35px
+  }
+
+  #flora-wrap .fr-wrapper h3 {
+    font-size: 24px;
+    line-height: normal
+  }
+
+  #flora-wrap .fr-wrapper h4 {
+    font-size: 19px;
+    line-height: normal
+  }
+
+  #flora-wrap .fr-wrapper h5 {
+    font-size: 17px;
+    line-height: normal
+  }
+
+  #flora-wrap .fr-wrapper .underlined {
+    border-bottom: 1px solid #d4d4d4
+  }
+
+  #flora-wrap .fr-wrapper h2.underlined {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 15px
+  }
+
+  #flora-wrap .fr-wrapper h3.underlined {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 8px;
+    font-size: 20px
+  }
+
+  #flora-wrap .fr-wrapper h4.underlined {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 8px;
+    font-size: 20px
+  }
+
+  #flora-wrap .fr-wrapper h5.underlined {
+    margin-top: 0px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    font-size: 16px
+  }
+
+  #flora-wrap .fr-wrapper p {
+    padding: 10px 0px
+  }
+
+  #flora-wrap .fr-wrapper b {
+    font-weight: normal
+  }
+
+  #flora-wrap .fr-wrapper strong {
+    font-weight: bold
+  }
+
+  #flora-wrap .fr-wrapper em {
+    font-style: italic
+  }
+
+  #flora-wrap .fr-wrapper ol {
+    list-style: lower-roman
+  }
+
+  #flora-wrap .fr-wrapper ul {
+    list-style: square
+  }
+
+  #flora-wrap .fr-wrapper label {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px
+  }
+
+  #flora-wrap .fr-wrapper label.disabled {
+    color: #aaa
+  }
+
+  #flora-wrap .fr-wrapper form .formatting-help {
+    font: 12px/1.4 "Helvetica Neue", Arial, sans-serif
+  }
+
+  #flora-wrap .fr-wrapper input[type=email], #flora-wrap .fr-wrapper input[type=url], #flora-wrap .fr-wrapper input[type=password], #flora-wrap .fr-wrapper input[type=text], #flora-wrap .fr-wrapper input[type=number] {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    background-clip: padding-box;
+    background: white;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #7e7e7e;
+    height: 30px;
+    margin: 0;
+    outline: 0;
+    padding: 5px 0 6px 8px;
+    position: relative;
+    -webkit-appearance: none
+  }
+
+  #flora-wrap .fr-wrapper input[type=email][disabled], #flora-wrap .fr-wrapper input[type=url][disabled], #flora-wrap .fr-wrapper input[type=password][disabled], #flora-wrap .fr-wrapper input[type=text][disabled], #flora-wrap .fr-wrapper input[type=number][disabled] {
+    background: #ededed;
+    cursor: not-allowed
+  }
+
+  #flora-wrap .fr-wrapper input[type=email].invalid, #flora-wrap .fr-wrapper input[type=url].invalid, #flora-wrap .fr-wrapper input[type=password].invalid, #flora-wrap .fr-wrapper input[type=text].invalid, #flora-wrap .fr-wrapper input[type=number].invalid {
+    background: #fff6f6;
+    border-color: #a90000
+  }
+
+  #flora-wrap .fr-wrapper input[type=email].validating, #flora-wrap .fr-wrapper input[type=url].validating, #flora-wrap .fr-wrapper input[type=password].validating, #flora-wrap .fr-wrapper input[type=text].validating, #flora-wrap .fr-wrapper input[type=number].validating {
+    background-image: url(https://public-assets.envato-static.com/assets/common/small_loader-04748fcf273b76003c0cdb271c3f9b4525bd291833be9162227bf7580697c2d7.gif);
+    background-position: 99%;
+    background-repeat: no-repeat
+  }
+
+  ::-webkit-input-placeholder {
+    color: #bbb
+  }
+
+  #flora-wrap .fr-wrapper input:-moz-placeholder {
+    color: #bbb
+  }
+
+  #flora-wrap .fr-wrapper textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    background-clip: padding-box;
+    background: white;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #7e7e7e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 150px;
+    margin: 0;
+    outline: 0;
+    padding: 10px
+  }
+
+  #flora-wrap .fr-wrapper textarea[disabled] {
+    background: #ededed;
+    cursor: not-allowed
+  }
+
+  #flora-wrap .fr-wrapper textarea.tall {
+    height: 500px
+  }
+
+  #flora-wrap .fr-wrapper textarea.invalid {
+    background: #fff6f6;
+    border-color: #a90000
+  }
+  #flora-wrap .fr-wrapper select[multiple] {
+    height: 100px
+  }
+
+  #flora-wrap .fr-wrapper input[type=file] {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    background: white;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 13px;
+    margin: 0;
+    padding: 5px 8px 6px 8px;
+    outline: 0
+  }
+
+  #flora-wrap .fr-wrapper input[type=checkbox], input[type=radio] {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    border: none;
+    cursor: pointer;
+    height: auto;
+    line-height: normal;
+    margin: 3px 0;
+    padding: 0;
+    width: auto
+  }
+
+  #flora-wrap .fr-wrapper input[type=checkbox]:focus, input[type=radio]:focus {
+    outline: 1px dotted #222
+  }
+
+  #flora-wrap .fr-wrapper pre.existing-value {
+    white-space: pre-wrap
+  }
+
+  #flora-wrap .fr-wrapper form fieldset {
+    border: none;
+    margin: 0;
+    padding: 0
+  }
+
+  #flora-wrap .fr-wrapper form fieldset p {
+    padding-top: 0
+  }
+
+  #flora-wrap .fr-wrapper input[type=checkbox].wordy-checkbox {
+    float: left;
+    margin: 3px 10px 60px 0
+  }
+
+  #flora-wrap .fr-wrapper code, #flora-wrap .fr-wrapper pre {
+    color: #333333;
+    font: 11px Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word
+  }
+
+  #flora-wrap .fr-wrapper pre {
+    background-color: whitesmoke;
+    background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNmNWY1ZjUiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iI2U2ZTZlNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==");
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, #f5f5f5), color-stop(50%, #e6e6e6));
+    background-image: -webkit-linear-gradient(#f5f5f5 50%, #e6e6e6 50%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(50%, #f5f5f5), color-stop(50%, #e6e6e6));
+    background-image: linear-gradient(#f5f5f5 50%, #e6e6e6 50%);
+    background-size: 38px 38px;
+    border: 1px solid #d4d4d4;
+    display: block;
+    line-height: 19px;
+    margin-bottom: 10px;
+    overflow: visible;
+    overflow-y: hidden;
+    padding: 0 0 0 4px
+  }
+
+
+  #flora-wrap .fr-wrapper table td, #flora-wrap .fr-wrapper table th {
+  /*border: inherit;*/
+  }
+
+  #flora-wrap .fr-wrapper {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    overflow: auto
+  }
+
+  #flora-wrap .fr-wrapper p {
+    margin-bottom: 20px;
+    padding: 0
+  }
+
+  #flora-wrap .fr-wrapper p:last-child {
+    margin-bottom: 0
+  }
+
+  #flora-wrap .fr-wrapper small {
+    color: #909090;
+    font-size: 12px
+  }
+
+  #flora-wrap .fr-wrapper ol, #flora-wrap .fr-wrapper ul {
+    margin-bottom: 20px;
+    padding-left: 25px
+  }
+
+  #flora-wrap .fr-wrapper ol:last-child, #flora-wrap .fr-wrapper ul:last-child {
+    margin-bottom: 0
+  }
+
+  #flora-wrap .fr-wrapper ol {
+    list-style-type: decimal
+  }
+
+  #flora-wrap .fr-wrapper ul {
+    list-style: disc
+  }
+
+  #flora-wrap .fr-wrapper table {
+    margin-bottom: 20px;
+    max-width: 100%;
+    overflow: auto;
+    border-collapse: separate;
+  }
+
+  #flora-wrap .fr-wrapper img {
+    max-width: 100%;
+    margin: 0;
+    vertical-align: initial;
+  }
+
+  #flora-wrap .fr-wrapper blockquote {
+    border-left: 1px solid #454545;
+    color: #777;
+    font-style: italic;
+    margin-bottom: 20px;
+    padding-left: 20px
+  }
+
+  #flora-wrap .fr-wrapper pre {
+    margin-bottom: 20px
+  }
+
+  #flora-wrap .fr-wrapper h2, #flora-wrap .fr-wrapper h3, #flora-wrap .fr-wrapper h4, #flora-wrap .fr-wrapper h5, #flora-wrap .fr-wrapper h6 {
+    margin: 30px 0 20px;
+    padding: 0
+  }
+
+  #flora-wrap .fr-wrapper h2:first-child, #flora-wrap .fr-wrapper h3:first-child, #flora-wrap .fr-wrapper h4:first-child, #flora-wrap .fr-wrapper h5:first-child, #flora-wrap .fr-wrapper h6:first-child {
+    margin-top: 0
+  }
+
+  #flora-wrap .fr-wrapper h1 {
+    display: none
+  }
+
+  #flora-wrap .fr-wrapper h2 {
+    border-bottom: 1px solid #d4d4d4;
+    font-size: 20px;
+    line-height: 30px;
+    padding-bottom: 10px
+  }
+
+  #flora-wrap .fr-wrapper h3 {
+    border-bottom: 1px solid #d4d4d4;
+    font-size: 18px;
+    line-height: 27px;
+    color: #545454;
+    padding-bottom: 10px
+  }
+
+  #flora-wrap .fr-wrapper h4 {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+    text-transform: uppercase
+  }
+
+  #flora-wrap .fr-wrapper a {
+    color: #0084B4
+  }
+
+  #flora-wrap .fr-wrapper a:hover {
+    color: #00719b
+  }
+
+  #flora-wrap .fr-wrapper ol, #flora-wrap .fr-wrapper ul {
+    padding-left: 35px
+  }
+
 </style>

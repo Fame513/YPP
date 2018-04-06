@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Input, Row} from 'react-materialize';
+import {Input, Row, Col} from 'react-materialize';
 
 export class TemplateList extends React.Component<{ model: Model }> {
   public model: Model;
@@ -17,9 +17,9 @@ export class TemplateList extends React.Component<{ model: Model }> {
   render() {
     const list = this.model.templates.map((temp, i) => <option value={i}>{temp.name}</option>);
     return (
-      <div style={{display: 'flex'}}>
+      <div>
         <Row>
-          <Input type='select' label="Templte" defaultValue={this.model.selectedTemplate}
+          <Input s={12} type='select' label="Templte" defaultValue={this.model.selectedTemplate}
                  onChange={this.handleInputChange.bind(this)} >
             {list}
           </Input>

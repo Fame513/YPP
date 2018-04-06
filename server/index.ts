@@ -92,7 +92,7 @@ app.listen(process.env.PORT || 80);
 
 function formatTime(time) {
   time = Math.floor(time);
-  return Math.floor(time / 60) + ':' + (time % 60);
+  return Math.floor(time / 60) + ':' + ('00'+(time % 60)).slice(-2);
 }
 
 
