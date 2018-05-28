@@ -48,9 +48,7 @@
               :items="categoryListItems"
               v-model="selectedTemplate.category"
               label="Category"
-              single-line
             ></v-select>
-            <v-text-field label="Category" v-model="selectedTemplate.category"/>
             <div id="flora-wrap">
               <froala :tag="'textarea'" :config="config" v-model="selectedTemplate.description"/>
             </div>

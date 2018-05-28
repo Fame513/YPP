@@ -17,7 +17,8 @@
     "gulp-copy": "^1.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-materialize": "^1.1.2"
+    "react-materialize": "^1.1.2",
+    "stream-buffers": "^3.0.2"
   },
   "devDependencies": {
     "@types/autobind-decorator": "^2.1.0",
